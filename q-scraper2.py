@@ -73,17 +73,26 @@ def get_reviews(section_url):
 
 class_links = get_class_links(Q_LIST)
 
-dept_classes = get_classes(class_links[14])
+cs_classes = get_classes(class_links[14])
 
-class1 = get_reviews(dept_classes[1])
 
 
 with open("data/course1.csv", "wb") as csvout:
     writer = csv.writer(csvout)
-    row = [class1[0]]
-    for c in class1[1]:
-        row.append(c)
-    writer.writerow(row)
+    for cl in cs_classes:
+        cla = get_reviews(cl)
+        row = [cla[0]]
+        for c in cla[1]:
+            # c = c.replace(u'\u2014',u'-')
+            c = c.encode('utf-8')
+            row.append(c)
+        writer.writerow(row)
+
+# class1 = get_reviews(cs_classes[1])
+#     row = [class1[0]]
+#     for c in class1[1]:
+#         row.append(c)
+#     writer.writerow(row)
 
 # for i, link in enumerate(class_links):
 #     if link == "https://webapps.fas.harvard.edu/course_evaluation_reports/fas/list?yearterm=2014_1&dept=Engineering and Applied Sciences#Engineering and Applied Sciences":
