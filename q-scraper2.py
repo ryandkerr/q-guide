@@ -2,7 +2,6 @@
 # q-scraper.py
 # python web scraper for the Harvard Q guide
 
-from __future__ import print_function
 from bs4 import BeautifulSoup
 from urllib2 import urlopen
 import requests
@@ -13,7 +12,6 @@ LOGIN_URL = "https://www.pin1.harvard.edu/cas/login?service=https%3A%2F%2Fwww.pi
 
 # with help from Nikhil Benesch's gist:
 # https://gist.github.com/benesch/43515655b1f877779522
-
 # This session ID can be obtained by signing into the Q from your
 # browser and inspecting the value of the JSESSIONID cookie. It expires
 # frequently!
@@ -73,10 +71,14 @@ def get_reviews(section_url):
 
 class_links = get_class_links(Q_LIST)
 
+# for i, link in enumerate(class_links):
+#     if link == "https://webapps.fas.harvard.edu/course_evaluation_reports/fas/list?yearterm=2014_1&dept=Engineering and Applied Sciences#Engineering and Applied Sciences":
+#         print(i)
+# SEAS classes are index 14 
 cs_classes = get_classes(class_links[14])
 
 
-
+# write csv file
 with open("data/course1.csv", "wb") as csvout:
     writer = csv.writer(csvout)
     for cl in cs_classes:
@@ -88,12 +90,3 @@ with open("data/course1.csv", "wb") as csvout:
             row.append(c)
         writer.writerow(row)
 
-# class1 = get_reviews(cs_classes[1])
-#     row = [class1[0]]
-#     for c in class1[1]:
-#         row.append(c)
-#     writer.writerow(row)
-
-# for i, link in enumerate(class_links):
-#     if link == "https://webapps.fas.harvard.edu/course_evaluation_reports/fas/list?yearterm=2014_1&dept=Engineering and Applied Sciences#Engineering and Applied Sciences":
-#         print(i)
