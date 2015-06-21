@@ -33,47 +33,41 @@ SESSION_ID = '6EA803C3E5E3B46999FA7A69CF2D3EEA'
  
 # Q URLs
 Q_ROOT = 'https://webapps.fas.harvard.edu/course_evaluation_reports/fas/list?yearterm=2014_1'
+
+# helper for making soup using cookies
+def make_soup(page_url): 
+    session = requests.Session()
+    session.cookies = requests.utils.cookiejar_from_dict({
+        'JSESSIONID': SESSION_ID
+    })
+    session.verify = False
+     
+    request = session.get(page_url)
+    return BeautifulSoup(request.text, "lxml")
  
-session = requests.Session()
-session.cookies = requests.utils.cookiejar_from_dict({
-    'JSESSIONID': SESSION_ID
-})
-session.verify = False
- 
-request = session.get(Q_ROOT)
- 
-# print(request.text)
-# do stuff
-
-
-
-# helper for making soup
-def make_soup(url):
-  html = urlopen(url).read()
-  s = BeautifulSoup(html, "lxml")
-  return s
-
 # takes base url and returns array of department drop-down pages
-def get_class_links(page_text):
-    soup = BeautifulSoup(page_text, "lxml")
+def get_class_links(section_url):
+    soup = make_soup(section_url)
 
-    depts = soup.find_all("div", "course-block-head")
-    print(depts)
+    # depts = soup.find_all("div", "course-block-head")
+    # print(depts)
 
-    # triangles = soup.find_all("a", "remove_link")
+    triangles = soup.find_all("a", "remove_link")
     
-    # print triangles
+    # print(triangles)
 
-    # link_list = []
-    # for triangle in triangles:
-    #     link = triangle.get("href")
-    #     if not l in link_list:
-    #         link_list.append(link)
     link_list = []
-    for dept in depts:
-        d = dept.find("span")["title"]
-        base = "https://webapps.fas.harvard.edu/course_evaluation_reports/fas/list?dept="
-        link_list.append(base + d)
+    for triangle in triangles:
+        link = triangle.get("href")
+        l = Q_ROOT + "&" + link.split("?")[-1]
+        if not l in link_list:
+            link_list.append(l)
+    # link_list = []
+    # for dept in depts:
+    #     d = dept.find("span")
+        # print(d)
+        # base = "https://webapps.fas.harvard.edu/course_evaluation_reports/fas/list?dept="
+        # link_list.append(base + d)
 
     return link_list
 
@@ -97,6 +91,6 @@ def get_class_links(page_text):
 
 # all_classes = []
 
-class_links = get_class_links(request.text)
+class_links = get_class_links(Q_ROOT)
 
 print(class_links)
