@@ -64,7 +64,8 @@ def get_reviews(section_url):
     review_link = Q_BASE + "view_comments.html?" + course_id + "&qid=1487&sect_num="
     soup = make_soup(review_link)
     course_name = soup.find("h1").get_text(strip=True)
-    reviews = soup.find_all("p")
+    review_elts = soup.find_all("p")
+    reviews = map(lambda x: x.get_text(strip=True), review_elts) 
     # this is because first two <p> elements are not reviews
     return (course_name, reviews[2:])
 
@@ -76,11 +77,13 @@ dept_classes = get_classes(class_links[14])
 
 class1 = get_reviews(dept_classes[1])
 
-print(class1[1])
 
-
-# with open("data/course1.csv", "wb") as csvout:
-#     writer = csv.writer(csvout)
+with open("data/course1.csv", "wb") as csvout:
+    writer = csv.writer(csvout)
+    row = [class1[0]]
+    for c in class1[1]:
+        row.append(c)
+    writer.writerow(row)
 
 # for i, link in enumerate(class_links):
 #     if link == "https://webapps.fas.harvard.edu/course_evaluation_reports/fas/list?yearterm=2014_1&dept=Engineering and Applied Sciences#Engineering and Applied Sciences":
