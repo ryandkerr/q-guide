@@ -17,8 +17,10 @@ def make_soup(url):
 # takes base url and returns array of department drop-down pages
 def get_class_links(section_url):
     soup = make_soup(section_url)
-    depts = soup.find_all("div", "course-block-head")
+    print soup
 
+    depts = soup.find_all("div", "course-block-head")
+    print depts
 
     # triangles = soup.find_all("a", "remove_link")
     
