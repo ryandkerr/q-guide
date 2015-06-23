@@ -22,3 +22,12 @@ with open("data/test_q.csv", "rb") as test_csv:
             # to change value for each dictionary item
             # for key in c:
             #     c[key] *= 2
+
+
+# further steps:
+# 1. create dictionary for all SEAS classes, which should have values for each
+# word be percentage of total words
+# 2. create similar dictionary for each individual course
+# 3. modify values of each course dict to be difference in percentage from
+# all SEAS dict
+# 4. export that data
