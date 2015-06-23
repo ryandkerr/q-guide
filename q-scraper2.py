@@ -1,5 +1,5 @@
 # Ryan Kerr
-# q-scraper.py
+# q-scraper2.py
 # python web scraper for the Harvard Q guide
 
 from bs4 import BeautifulSoup
