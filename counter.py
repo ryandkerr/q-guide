@@ -18,8 +18,12 @@ with open("data/test_q.csv", "rb") as test_csv:
 
             lower_words = [word.lower() for word in all_words]
             c = Counter(lower_words)
-            for key in c:
-                print [key, c[key]]
+            with open("data/test_export.csv", "wb") as test_export:
+                writer = csv.writer(test_export)
+                for key in c:
+                    row = [key, c[key]]
+                    writer.writerow(row)
+
             # total_words = sum(c.itervalues())
 
             # to change value for each dictionary item
