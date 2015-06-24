@@ -16,8 +16,11 @@ with open("data/test_q.csv", "rb") as test_csv:
                 all_words += words
 
 
-            c = Counter(all_words)
-            total_words = sum(c.itervalues())
+            lower_words = [word.lower() for word in all_words]
+            c = Counter(lower_words)
+            for key in c:
+                print [key, c[key]]
+            # total_words = sum(c.itervalues())
 
             # to change value for each dictionary item
             # for key in c:
