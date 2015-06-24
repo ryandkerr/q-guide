@@ -3,9 +3,11 @@
 # reads q-guide csv and counts most-used words
 
 import csv
+import json
 import re
 from collections import Counter
 
+# reading in test data csv and creating dictionary
 with open("data/test_q.csv", "rb") as test_csv:
     test = csv.reader(test_csv)
     for row in test:
@@ -14,15 +16,14 @@ with open("data/test_q.csv", "rb") as test_csv:
             for i, review in enumerate(row):
                 words = re.findall(r'\w+', review)
                 all_words += words
-
-
             lower_words = [word.lower() for word in all_words]
             c = Counter(lower_words)
-            with open("data/test_export.csv", "wb") as test_export:
-                writer = csv.writer(test_export)
-                for key in c:
-                    row = [key, c[key]]
-                    writer.writerow(row)
+            
+            # creating json ouput 
+            d = [{"text":key, "size":value} for key,value in c.items()]
+            j = json.dumps(d, indent=4)
+            with open("data/test_export.json", "w") as test_export:
+                print >> test_export, j
 
             # total_words = sum(c.itervalues())
 
