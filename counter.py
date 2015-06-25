@@ -2,6 +2,7 @@
 # counter.py
 # reads q-guide csv and counts most-used words
 
+from __future__ import division
 import csv
 import json
 import re
@@ -36,6 +37,10 @@ def seas_dept():
                 all_words += words
         lower_words = [word.lower() for word in all_words]
         c = Counter(lower_words)
+        total_words = sum(c.itervalues())
+        print total_words
+        for key in c:
+            c[key] = c[key]/total_words
 
         # creating json output
         d = [{"text":key, "size":value} for key,value in c.items()]
