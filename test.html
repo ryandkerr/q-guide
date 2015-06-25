@@ -11,9 +11,42 @@ var TEST;
 
 d3.json("data/test_export.json", function(error, data) {
   TEST = data;
-}
 
-debugger;
+  wordScale=d3.scale.linear().domain([0,40]).range([10,160]);
+  var fill = d3.scale.category20();
+  svg_size = [500, 500]
+
+  d3.layout.cloud()
+     .size(svg_size)
+     .words(TEST)
+     .fontSize(function(d) { return wordScale(d.size); })
+     .on("end", draw)
+     .start();
+
+     function draw(words) {
+       d3.select("body").append("svg")
+           .attr("width", svg_size[0])
+           .attr("height", svg_size[1])
+         .append("g")
+           .attr("transform", "translate(" + svg_size[0] / 2 + "," + svg_size[1] / 2 + ")")
+         .selectAll("text")
+           .data(words)
+         .enter().append("text")
+           .style("font-size", function(d) { return d.size + "px"; })
+           .style("font-family", "Impact")
+           .style("fill", function(d, i) { return fill(i); })
+           .attr("text-anchor", "middle")
+           .attr("transform", function(d) {
+             return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+           })
+           .text(function(d) { return d.text; });
+     }
+})
+
+
+
+
+
 
 </script>
 </body>
