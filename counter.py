@@ -54,6 +54,7 @@ def make_json(file_name, diction):
     with open(file_name, "w") as export:
         print >> export, j
 
+
 seas = seas_dept()
 pct_seas = pct_dict(seas)
 
@@ -64,21 +65,3 @@ test_final = compare_dicts(pct_test, pct_seas)
 
 make_json("data/seas.json", pct_seas)
 make_json("data/test_adjusted.json", test_final)
-
-
-
-
-# total_words = sum(c.itervalues())
-
-# to change value for each dictionary item
-# for key in c:
-#     c[key] *= 2
-
-
-# further steps:
-# 1. create dictionary for all SEAS classes, which should have values for each
-# word be percentage of total words
-# 2. create similar dictionary for each individual course
-# 3. modify values of each course dict to be difference in percentage from
-# all SEAS dict
-# 4. export that data
