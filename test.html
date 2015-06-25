@@ -9,10 +9,10 @@
 <script>
 var TEST;
 
-d3.json("data/test_export.json", function(error, data) {
+d3.json("data/seas.json", function(error, data) {
   TEST = data;
 
-  wordScale=d3.scale.linear().domain([0,40]).range([10,160]);
+  wordScale=d3.scale.linear().domain([0,1500]).range([10,160]);
   var fill = d3.scale.category20();
   svg_size = [500, 500]
 

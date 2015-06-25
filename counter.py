@@ -45,11 +45,14 @@ def seas_dept():
 
 seas_dept()
 
-                # total_words = sum(c.itervalues())
 
-                # to change value for each dictionary item
-                # for key in c:
-                #     c[key] *= 2
+
+
+# total_words = sum(c.itervalues())
+
+# to change value for each dictionary item
+# for key in c:
+#     c[key] *= 2
 
 
 # further steps:
