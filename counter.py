@@ -41,14 +41,17 @@ def seas_dept():
         print total_words
         for key in c:
             c[key] = c[key]/total_words
+        return c
 
-        # creating json output
-        d = [{"text":key, "size":value} for key,value in c.items()]
-        j = json.dumps(d)
-        with open("data/seas.json", "w") as seas_export:
-            print >> seas_export, j
+def make_json(file_name, diction):
+    d = [{"text":key, "size":value} for key,value in diction.items()]
+    j = json.dumps(d)
+    with open(file_name, "w") as export:
+        print >> export, j
 
-seas_dept()
+seas = seas_dept()
+
+make_json("data/seas.json", seas)
 
 
 
