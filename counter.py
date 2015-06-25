@@ -20,12 +20,6 @@ def export_test():
                     all_words += words
                 lower_words = [word.lower() for word in all_words]
                 c = Counter(lower_words)
-                
-                # creating json ouput 
-                d = [{"text":key, "size":value} for key,value in c.items()]
-                j = json.dumps(d, indent=4)
-                with open("data/test_export.json", "w") as test_export:
-                    print >> test_export, j
 
 def seas_dept():
     with open("data/course1.csv", "rb") as input:
@@ -36,12 +30,16 @@ def seas_dept():
                 words = re.findall(r'\w+', review)
                 all_words += words
         lower_words = [word.lower() for word in all_words]
-        c = Counter(lower_words)
-        total_words = sum(c.itervalues())
-        print total_words
-        for key in c:
-            c[key] = c[key]/total_words
-        return c
+        d = Counter(lower_words)
+        return d
+
+# functional-esque programming in python!
+def pct_dict(diction):
+    d = dict(diction)
+    total_words = sum(d.itervalues())
+    for key in d:
+        d[key] /= total_words
+    return d
 
 def make_json(file_name, diction):
     d = [{"text":key, "size":value} for key,value in diction.items()]
@@ -50,8 +48,9 @@ def make_json(file_name, diction):
         print >> export, j
 
 seas = seas_dept()
+pct_seas = pct_dict(seas)
 
-make_json("data/seas.json", seas)
+make_json("data/seas.json", pct_seas)
 
 
 
