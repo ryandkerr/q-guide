@@ -11,7 +11,7 @@ from collections import Counter
 # reading in test data csv and creating dictionary
 def count_row(row):
     all_words = []
-    for review in row:
+    for review in row[2:]:
         words = re.findall(r'\w+', review)
         all_words += words
     lower_words = [word.lower() for word in all_words]
@@ -40,11 +40,12 @@ def export_by_all(file_name):
         read = csv.reader(reader)
         js_out = []
         for row in read:
-            course_name = row[0]
+            department = row[0]
+            course_name = row[1]
             d = compare_dicts(pct_dict(count_row(row)), all_dict)
             pruned = prune_dict(d, 40)
             r = [{"text":key, "size":value} for key,value in pruned.items()]
-            j = {"course": course_name, "reviews": r}
+            j = {"department": department, "course": course_name, "reviews": r}
             js_out.append(j)
         js = json.dumps(js_out)
         with open(file_name, "w") as export:
@@ -81,7 +82,7 @@ def create_master_dict(input, dept=None, family=None):
         all_words = []
         for row in reader:
             if match_filter(row, dept, family):
-                for review in row:
+                for review in row[2:]:
                     words = re.findall(r'\w+', review)
                     all_words += words
         lower_words = [word.lower() for word in all_words]

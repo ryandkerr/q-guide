@@ -9,12 +9,12 @@
 <script>
 var TEST;
 
-d3.json("data/all_classes.json", function(error, data) {
+d3.json("data/all_courses_all.json", function(error, data) {
   TEST = data;
   var COURSE_NAME = "COMPSCI 187: Computational Linguistics"
 
   var selected_course;
-  data.forEach(function(d) {
+  TEST.forEach(function(d) {
     if(d.course == COURSE_NAME) {
       selected_course = d;
     }
