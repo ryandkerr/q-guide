@@ -67,6 +67,8 @@ def get_reviews(section_url):
         reviews = map(lambda x: x.get_text(strip=True), review_elts) 
         # this is because first two <p> elements are not reviews
         return (course_name, reviews[2:])
+    else:
+        return ("none", ["none"])
 
 # all_classes = []
 
@@ -80,7 +82,7 @@ dept_links = get_dept_links(Q_LIST)
 
 
 # write csv file
-with open("data/course1.csv", "wb") as csvout:
+with open("data/all_courses.csv", "wb") as csvout:
     writer = csv.writer(csvout)
     for dept_url in dept_links:
         dept_classes = get_classes(dept_url)
