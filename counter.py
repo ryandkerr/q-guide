@@ -28,7 +28,7 @@ def export_all(file_name):
             d = compare_dicts(pct_dict(count_row(row)), pct_seas)
             pruned = prune_dict(d, 40)
             r = [{"text":key, "size":value} for key,value in pruned.items()]
-            j = [{"course": course_name, "reviews": r}]
+            j = {"course": course_name, "reviews": r}
             js_out.append(j)
         js = json.dumps(js_out)
         with open(file_name, "w") as export:
