@@ -34,6 +34,16 @@ def seas_dept():
         d = Counter(lower_words)
         return d
 
+def count_row(row):
+    all_words = []
+    for review in row:
+        words = re.findall(r'\w+', review)
+        all_words += words
+    lower_words = [word.lower() for word in all_words]
+    d = Counter(lower_words)
+    return d
+
+
 # functional-esque programming in python!
 def pct_dict(diction):
     d = dict(diction)
