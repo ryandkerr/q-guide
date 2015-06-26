@@ -48,6 +48,20 @@ def compare_dicts(d1, d2):
         d[key] -= d2[key]
     return d
 
+def prune_dict(diction, n=None):
+    d = dict(diction)
+    prune_words = ["a", "the", "of", "in", "to", "an", "is", "if", "course",
+                   "class", "for", "you", "i", "was", "were", "from", "and",
+                   "this", "are", "be", "will"]
+    for word in prune_words:
+        try:
+            del d[word]
+        except KeyError:
+            pass
+    d = dict(Counter(d).most_common(n))
+    return d
+
+
 def make_json(file_name, diction):
     d = [{"text":key, "size":value} for key,value in diction.items()]
     j = json.dumps(d)
@@ -61,7 +75,7 @@ pct_seas = pct_dict(seas)
 test1 = export_test()
 pct_test = pct_dict(test1)
 
-test_final = compare_dicts(pct_test, pct_seas)
+test_final = prune_dict(compare_dicts(pct_test, pct_seas))
 
 make_json("data/seas.json", pct_seas)
 make_json("data/test_adjusted.json", test_final)
