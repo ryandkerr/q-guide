@@ -15,7 +15,7 @@ LOGIN_URL = "https://www.pin1.harvard.edu/cas/login?service=https%3A%2F%2Fwww.pi
 # This session ID can be obtained by signing into the Q from your
 # browser and inspecting the value of the JSESSIONID cookie. It expires
 # frequently!
-SESSION_ID = '6EA803C3E5E3B46999FA7A69CF2D3EEA'
+SESSION_ID = 'D70A3E1C2ABF6A9163AE21C9F992FAC4'
  
 # Q URLs
 Q_BASE = "https://webapps.fas.harvard.edu/course_evaluation_reports/fas/"
@@ -61,11 +61,12 @@ def get_reviews(section_url):
     course_id = section_url.split("?")[-1]
     review_link = Q_BASE + "view_comments.html?" + course_id + "&qid=1487&sect_num="
     soup = make_soup(review_link)
-    course_name = soup.find("h1").get_text(strip=True)
-    review_elts = soup.find_all("p")
-    reviews = map(lambda x: x.get_text(strip=True), review_elts) 
-    # this is because first two <p> elements are not reviews
-    return (course_name, reviews[2:])
+    if soup.find("h1") != None:
+        course_name = soup.find("h1").get_text(strip=True)
+        review_elts = soup.find_all("p")
+        reviews = map(lambda x: x.get_text(strip=True), review_elts) 
+        # this is because first two <p> elements are not reviews
+        return (course_name, reviews[2:])
 
 # all_classes = []
 
@@ -75,18 +76,21 @@ dept_links = get_dept_links(Q_LIST)
 #     if link == "https://webapps.fas.harvard.edu/course_evaluation_reports/fas/list?yearterm=2014_1&dept=Engineering and Applied Sciences#Engineering and Applied Sciences":
 #         print(i)
 # SEAS classes are index 14 
-cs_classes = get_classes(dept_links[14])
+# cs_classes = get_classes(dept_links[14])
 
 
 # write csv file
 with open("data/course1.csv", "wb") as csvout:
     writer = csv.writer(csvout)
-    for cl in cs_classes:
-        cla = get_reviews(cl)
-        row = [cla[0]]
-        for c in cla[1]:
-            # c = c.replace(u'\u2014',u'-')
-            c = c.encode('utf-8')
-            row.append(c)
-        writer.writerow(row)
+    for dept_url in dept_links:
+        dept_classes = get_classes(dept_url)
+        selected_dept = dept_url.split("#")[-1]
+        for cl in dept_classes:
+            cla = get_reviews(cl)
+            row = [selected_dept, cla[0]]
+            for review in cla[1]:
+                # c = c.replace(u'\u2014',u'-')
+                review = review.encode('utf-8')
+                row.append(review)
+            writer.writerow(row)
 
