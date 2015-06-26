@@ -32,7 +32,7 @@ def make_soup(section_url):
     return BeautifulSoup(request.text, "lxml")
  
 # takes base url and returns array of department drop-down pages
-def get_class_links(section_url):
+def get_dept_links(section_url):
     soup = make_soup(section_url)
     triangles = soup.find_all("a", "remove_link")
     link_list = []
@@ -69,13 +69,13 @@ def get_reviews(section_url):
 
 # all_classes = []
 
-class_links = get_class_links(Q_LIST)
+dept_links = get_dept_links(Q_LIST)
 
-# for i, link in enumerate(class_links):
+# for i, link in enumerate(dept_links):
 #     if link == "https://webapps.fas.harvard.edu/course_evaluation_reports/fas/list?yearterm=2014_1&dept=Engineering and Applied Sciences#Engineering and Applied Sciences":
 #         print(i)
 # SEAS classes are index 14 
-cs_classes = get_classes(class_links[14])
+cs_classes = get_classes(dept_links[14])
 
 
 # write csv file
