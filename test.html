@@ -11,7 +11,7 @@ var TEST;
 
 d3.json("data/all_courses_all.json", function(error, data) {
   TEST = data;
-  var COURSE_NAME = "COMPSCI 187: Computational Linguistics"
+  var COURSE_NAME = "CHNSE Ba: Elementary Modern Chinese"
 
   var selected_course;
   TEST.forEach(function(d) {
@@ -20,7 +20,18 @@ d3.json("data/all_courses_all.json", function(error, data) {
     }
   })
 
-  wordScale=d3.scale.linear().domain([0,.02]).range([10,160]);
+  // debugger;
+
+  var max_size = 0;
+  selected_course.reviews.forEach(function(d) {
+    if(d.size > max_size) {
+      max_size = d.size + .01
+    }
+  })
+
+  debugger;
+
+  wordScale=d3.scale.linear().domain([0,max_size]).range([10,160]);
   var fill = d3.scale.category20();
   svg_size = [500, 500]
 
