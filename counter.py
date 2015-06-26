@@ -34,6 +34,22 @@ def export_all(file_name):
         with open(file_name, "w") as export:
             print >> export, js
 
+def export_by_all(file_name):
+    all_dict = pct_dict(create_master_dict("data/all_courses.csv"))
+    with open("data/all_courses.csv", "rb") as reader:
+        read = csv.reader(reader)
+        js_out = []
+        for row in read:
+            course_name = row[0]
+            d = compare_dicts(pct_dict(count_row(row)), all_dict)
+            pruned = prune_dict(d, 40)
+            r = [{"text":key, "size":value} for key,value in pruned.items()]
+            j = {"course": course_name, "reviews": r}
+            js_out.append(j)
+        js = json.dumps(js_out)
+        with open(file_name, "w") as export:
+            print >> export, js
+
 def export_test():
     with open("data/course1.csv", "rb") as test_csv:
         test = csv.reader(test_csv)
@@ -48,13 +64,13 @@ def export_test():
         return d
 
 def match_filter(row, dept, family):
-    if dept == None && family == None:
+    if (dept == None) & (family == None):
         return True
-    elif row[0] == dept && family == None:
+    elif (row[0] == dept) & (family == None):
         return True
-    elif dept == None && row[1] == family:
+    elif (dept == None) & (row[1] == family):
         return True
-    elif row[0] == dept && row[1] == family:
+    elif (row[0] == dept) & (row[1] == family):
         return True
     else:
         return False
@@ -72,19 +88,17 @@ def create_master_dict(input, dept=None, family=None):
         d = Counter(lower_words)
         return d
 
-seas_dept = create_master_dict("data/all_courses.csv", dept="Engineering and Applied Sciences")
-
-def seas_dept():
-    with open("data/course1.csv", "rb") as input:
-        reader = csv.reader(input)
-        all_words = []
-        for row in reader:
-            for review in row:
-                words = re.findall(r'\w+', review)
-                all_words += words
-        lower_words = [word.lower() for word in all_words]
-        d = Counter(lower_words)
-        return d
+# def seas_dept():
+#     with open("data/course1.csv", "rb") as input:
+#         reader = csv.reader(input)
+#         all_words = []
+#         for row in reader:
+#             for review in row:
+#                 words = re.findall(r'\w+', review)
+#                 all_words += words
+#         lower_words = [word.lower() for word in all_words]
+#         d = Counter(lower_words)
+#         return d
 
 # functional-esque programming in python!
 def pct_dict(diction):
@@ -120,14 +134,16 @@ def make_json(file_name, diction):
         print >> export, j
 
 
-seas = seas_dept()
-pct_seas = pct_dict(seas)
+# seas = seas_dept()
+# pct_seas = pct_dict(seas)
 
 # test1 = export_test()
 # pct_test = pct_dict(test1)
 
 # test_final = prune_dict(compare_dicts(pct_test, pct_seas), 40)
-export_all("data/all_classes.json")
+# export_all("data/all_classes.json")
 
-make_json("data/seas.json", pct_seas)
+# make_json("data/seas.json", pct_seas)
 # make_json("data/test_adjusted.json", test_final)
+export_by_all("data/all_courses_all.json")
+
