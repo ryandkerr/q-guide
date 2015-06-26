@@ -9,8 +9,16 @@
 <script>
 var TEST;
 
-d3.json("data/test_adjusted.json", function(error, data) {
+d3.json("data/all_classes.json", function(error, data) {
   TEST = data;
+  var COURSE_NAME = "COMPSCI 109: Data Science"
+
+  var selected_course;
+  data.forEach(function(d) {
+    if(d.course == COURSE_NAME) {
+      selected_course = d;
+    }
+  })
 
   wordScale=d3.scale.linear().domain([0,.02]).range([10,160]);
   var fill = d3.scale.category20();
@@ -18,7 +26,7 @@ d3.json("data/test_adjusted.json", function(error, data) {
 
   d3.layout.cloud()
      .size(svg_size)
-     .words(TEST)
+     .words(selected_course.reviews)
      .fontSize(function(d) { return wordScale(d.size); })
      .on("end", draw)
      .start();
