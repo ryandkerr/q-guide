@@ -47,12 +47,39 @@ def export_test():
         d = Counter(lower_words)
         return d
 
+def match_filter(row, dept, family):
+    if dept == None && family == None:
+        return True
+    elif row[0] == dept && family == None:
+        return True
+    elif dept == None && row[1] == family:
+        return True
+    elif row[0] == dept && row[1] == family:
+        return True
+    else:
+        return False
+
+def create_master_dict(input, dept=None, family=None):
+    with open(input, "rb") as input:
+        reader = csv.reader(input)
+        all_words = []
+        for row in reader:
+            if match_filter(row, dept, family):
+                for review in row:
+                    words = re.findall(r'\w+', review)
+                    all_words += words
+        lower_words = [word.lower() for word in all_words]
+        d = Counter(lower_words)
+        return d
+
+seas_dept = create_master_dict("data/all_courses.csv", dept="Engineering and Applied Sciences")
+
 def seas_dept():
     with open("data/course1.csv", "rb") as input:
         reader = csv.reader(input)
         all_words = []
         for row in reader:
-            for i, review in enumerate(row):
+            for review in row:
                 words = re.findall(r'\w+', review)
                 all_words += words
         lower_words = [word.lower() for word in all_words]
