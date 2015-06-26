@@ -10,11 +10,11 @@ from collections import Counter
 
 # reading in test data csv and creating dictionary
 def export_test():
-    with open("data/test_q.csv", "rb") as test_csv:
+    with open("data/course1.csv", "rb") as test_csv:
         test = csv.reader(test_csv)
         all_words = []
         for row in test:
-            if row[0] == "APCOMP 209: Data Science":
+            if row[0] == "COMPSCI 109: Data Science":
                 for i, review in enumerate(row):
                     words = re.findall(r'\w+', review)
                     all_words += words
@@ -61,7 +61,6 @@ def prune_dict(diction, n=None):
     d = dict(Counter(d).most_common(n))
     return d
 
-
 def make_json(file_name, diction):
     d = [{"text":key, "size":value} for key,value in diction.items()]
     j = json.dumps(d)
@@ -75,7 +74,7 @@ pct_seas = pct_dict(seas)
 test1 = export_test()
 pct_test = pct_dict(test1)
 
-test_final = prune_dict(compare_dicts(pct_test, pct_seas))
+test_final = prune_dict(compare_dicts(pct_test, pct_seas), 40)
 
 make_json("data/seas.json", pct_seas)
 make_json("data/test_adjusted.json", test_final)
