@@ -42,10 +42,11 @@ def export_by_all(file_name):
         for row in read:
             department = row[0]
             course_name = row[1]
+            course_fam = find_fam(course_name)
             d = compare_dicts(pct_dict(count_row(row)), all_dict)
             pruned = prune_dict(d, 40)
             r = [{"text":key, "size":value} for key,value in pruned.items()]
-            j = {"department": department, "course": course_name, "reviews": r}
+            j = {"department": department, "family": course_fam, "course": course_name, "reviews": r}
             js_out.append(j)
         js = json.dumps(js_out)
         with open(file_name, "w") as export:
@@ -58,11 +59,12 @@ def export_by_dept(file_name):
         for row in read:
             department = row[0]
             course_name = row[1]
+            course_fam = find_fam(course_name)
             comp = pct_dict(create_master_dict("data/all_courses.csv", department))
             d = compare_dicts(pct_dict(count_row(row)), comp)
             pruned = prune_dict(d, 40)
             r = [{"text":key, "size":value} for key,value in pruned.items()]
-            j = {"department": department, "course": course_name, "reviews": r}
+            j = {"department": department, "family": course_fam, "course": course_name, "reviews": r}
             js_out.append(j)
         js = json.dumps(js_out)
         with open(file_name, "w") as export:
@@ -77,11 +79,12 @@ def export_by_fam(file_name):
         for row in read:
             department = row[0]
             course_name = row[1]
-            comp = pct_dict(create_master_dict("data/all_courses.csv", department))
+            course_fam = find_fam(course_name)
+            comp = pct_dict(create_master_dict("data/all_courses.csv", family=course_fam))
             d = compare_dicts(pct_dict(count_row(row)), comp)
             pruned = prune_dict(d, 40)
             r = [{"text":key, "size":value} for key,value in pruned.items()]
-            j = {"department": department, "course": course_name, "reviews": r}
+            j = {"department": department, "family": course_fam, "course": course_name, "reviews": r}
             js_out.append(j)
         js = json.dumps(js_out)
         with open(file_name, "w") as export:
@@ -107,9 +110,9 @@ def match_filter(row, dept, family):
         return True
     elif (dept == row[0]) & (family == None):
         return True
-    elif (dept == None) & (family == row[1]):
+    elif (dept == None) & (family == find_fam(row[1])):
         return True
-    elif (dept == row[0]) & (family == row[1]):
+    elif (dept == row[0]) & (family == find_fam(row[1])):
         return True
     else:
         return False
