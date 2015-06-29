@@ -127,6 +127,9 @@ def create_master_dict(input, dept=None, family=None):
         d = Counter(lower_words)
         return d
 
+def find_fam(cell):
+    return cell.split(" ")[0]
+
 # def seas_dept():
 #     with open("data/course1.csv", "rb") as input:
 #         reader = csv.reader(input)
@@ -185,4 +188,5 @@ def make_json(file_name, diction):
 # make_json("data/seas.json", pct_seas)
 # make_json("data/test_adjusted.json", test_final)
 # export_by_all("data/all_courses_all.json")
-export_by_dept("data/all_courses_dept.json")
+# export_by_dept("data/all_courses_dept.json")
+
