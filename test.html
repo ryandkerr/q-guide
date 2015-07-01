@@ -82,9 +82,7 @@ var layout_cloud = function(words) {
      .start();
 
   function draw(words) {
-    d3.select("#cloud").append("svg")
-       .attr("width", SVG_SIZE[0])
-       .attr("height", SVG_SIZE[1])
+    d3.select("#cloud").select("#cloud_svg")
      .append("g")
        .attr("transform", "translate(" + SVG_SIZE[0] / 2 + "," + SVG_SIZE[1] / 2 + ")")
      .selectAll("text")
@@ -115,6 +113,11 @@ var startHere = function() {
       BY_DEPT = dept;
       BY_FAM = fam;
       classList(BY_ALL);
+
+      d3.select("#cloud").append("svg")
+       .attr("id", "cloud_svg")
+       .attr("width", SVG_SIZE[0])
+       .attr("height", SVG_SIZE[1])
       
       updateData();
     } else {
