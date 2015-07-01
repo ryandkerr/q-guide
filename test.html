@@ -28,62 +28,60 @@ var startHere = function() {
 
     if (!error) {
 
-      // var TEST;
-      // var SVG_SIZE = [500, 500];
-      // var selected_course = "";
-      // var fill = d3.scale.category20();
+      var BY_ALL = all;
+      var BY_DEPT = dept;
+      var BY_FAM = fam;
+      var SVG_SIZE = [500, 500];
+      var selected_course = "";
+      var fill = d3.scale.category20();
+      var COURSE_NAME = "EXPOS 20.241: Paradox in Public Health";
 
-      // var layout_cloud = function(words) {
-      //   d3.layout.cloud()
-      //      .size(SVG_SIZE)
-      //      .words(words)
-      //      .fontSize(function(d) { return wordScale(d.size); })
-      //      .on("end", draw)
-      //      .start();
-      // }
+      var selected_course;
+      all.forEach(function(d) {
+        if(d.course == COURSE_NAME) {
+          selected_course = d;
+        }
+      });
 
-      // var draw = function(words) {
-      //   d3.select("#cloud").append("svg")
-      //      .attr("width", SVG_SIZE[0])
-      //      .attr("height", SVG_SIZE[1])
-      //    .append("g")
-      //      .attr("transform", "translate(" + SVG_SIZE[0] / 2 + "," + SVG_SIZE[1] / 2 + ")")
-      //    .selectAll("text")
-      //      .data(words)
-      //    .enter().append("text")
-      //      .style("font-size", function(d)  { return d.size + "px"; })
-      //      .style("font-family", "Impact")
-      //      .style("fill", function(d, i) { return fill(i); })
-      //      .attr("text-anchor", "middle")
-      //      .attr("transform", function(d) {
-      //        return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
-      //      })
-      //      .text(function(d) { return d.text; });
-      // }
+      var max_size = 0;
+      selected_course.reviews.forEach(function(d) {
+        if(d.size > max_size) {
+          max_size = d.size + .01
+        }
+      });
 
+      wordScale=d3.scale.linear().domain([0,max_size]).range([10,160]);
 
-      // d3.json("data/all_courses_all.json", function(error, data) {
-      //   TEST = data;
-      //   var COURSE_NAME = "EXPOS 20.241: Paradox in Public Health";
+      var layout_cloud = function(words) {
+        d3.layout.cloud()
+           .size(SVG_SIZE)
+           .words(words)
+           .fontSize(function(d) { return wordScale(d.size); })
+           .on("end", draw)
+           .start();
 
-      //   var selected_course;
-      //   TEST.forEach(function(d) {
-      //     if(d.course == COURSE_NAME) {
-      //       selected_course = d;
-      //     }
-      //   });
+        function draw(words) {
+          d3.select("#cloud").append("svg")
+             .attr("width", SVG_SIZE[0])
+             .attr("height", SVG_SIZE[1])
+           .append("g")
+             .attr("transform", "translate(" + SVG_SIZE[0] / 2 + "," + SVG_SIZE[1] / 2 + ")")
+           .selectAll("text")
+             .data(words)
+           .enter().append("text")
+             .style("font-size", function(d)  { return d.size + "px"; })
+             .style("font-family", "Impact")
+             .style("fill", function(d, i) { return fill(i); })
+             .attr("text-anchor", "middle")
+             .attr("transform", function(d) {
+               return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+             })
+             .text(function(d) { return d.text; });
+        }
+      }
 
-      //   var max_size = 0;
-      //   selected_course.reviews.forEach(function(d) {
-      //     if(d.size > max_size) {
-      //       max_size = d.size + .01
-      //     }
-      //   });
+      layout_cloud(selected_course.reviews);
 
-      //   wordScale=d3.scale.linear().domain([0,max_size]).range([10,160]);
-
-      //   layout_cloud(selected_course.reviews);
-      // })
     } else {
       console.log("error loading data");
     }
