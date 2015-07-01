@@ -49,15 +49,17 @@ var classList = function(data) {
 
 var updateData = function() {
   // TODO: change these values based on drop-down
-  COURSE_NAME = "EXPOS 20.241: Paradox in Public Health";
+  COURSE_NAME = $("#classes").val();
   SELECTED_DATA = BY_ALL;
 
   course_data = "";
-  SELECTED_DATA.forEach(function(d) {
-    if(d.course == COURSE_NAME) {
-      course_data = d;
-    }
-  });
+  if(SELECTED_DATA != undefined) {
+    SELECTED_DATA.forEach(function(d) {
+      if(d.course == COURSE_NAME) {
+        course_data = d;
+      }
+    });
+  };
 
   max_size = 0;
   course_data.reviews.forEach(function(d) {
@@ -108,13 +110,12 @@ var startHere = function() {
     .await(dataLoaded);
 
   function dataLoaded(error, all, dept, fam) {
-    console.log(error, all, dept, fam);
-
     if (!error) {
       BY_ALL = all;
       BY_DEPT = dept;
       BY_FAM = fam;
       classList(BY_ALL);
+      
       updateData();
     } else {
       console.log("error loading data");
@@ -125,7 +126,7 @@ var startHere = function() {
 startHere();
 
 // listener for select item change
-$(".drop-down").change(updateData());
+$(".drop-down").change(updateData);
 
 
 
