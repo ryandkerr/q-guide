@@ -82,7 +82,11 @@ var layout_cloud = function(words) {
      .start();
 
   function draw(words) {
-    d3.select("#cloud").select("#cloud_svg")
+    var cloud_svg = d3.select("#cloud").select("#cloud_svg");
+
+    cloud_svg.selectAll("g").remove();
+
+    cloud_svg
      .append("g")
        .attr("transform", "translate(" + SVG_SIZE[0] / 2 + "," + SVG_SIZE[1] / 2 + ")")
      .selectAll("text")
