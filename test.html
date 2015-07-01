@@ -109,9 +109,9 @@ var startHere = function() {
     .defer(d3.json, "data/all_courses_all.json")
     .defer(d3.json, "data/all_courses_dept.json")
     .defer(d3.json, "data/all_courses_fam.json")
-    .await(dataLoaded);
+    .await(initVis);
 
-  function dataLoaded(error, all, dept, fam) {
+  function initVis(error, all, dept, fam) {
     if (!error) {
       BY_ALL = all;
       BY_DEPT = dept;
