@@ -9,13 +9,97 @@
 </head>
 
 <body>
-<select id="selector">
-  <option>All</option>
+<select class="drop-down" id="classes">
+</select>
+
+<select class="drop-down" id="comparison">
+  <option>All Classes</option>
+  <option>Department</option>
+  <option>Class Family</option>  
 </select>
 
 <div id="cloud"></div>
 
 <script>
+var BY_ALL;
+var BY_DEPT;
+var BY_FAM;
+var SELECTED_DATA;
+var SVG_SIZE = [500, 500];
+var course_data = "";
+var fill = d3.scale.category20();
+var COURSE_NAME = "EXPOS 20.241: Paradox in Public Health";
+var max_size;
+var wordScale;
+
+var classList = function(data) {
+  var CLASSES = [];
+  data.forEach(function(d) {
+    CLASSES.push(d.course);
+  });
+  var selected = document.getElementById("classes");
+  for(i = 0; i < CLASSES.length; i++) {
+    var opt = document.createElement('option');
+    // TODO: if class == cs50 make default
+    opt.innerHTML = CLASSES[i];
+    opt.value = CLASSES[i];
+    selected.appendChild(opt);
+  }
+};
+
+var updateData = function() {
+  // TODO: change these values based on drop-down
+  COURSE_NAME = "EXPOS 20.241: Paradox in Public Health";
+  SELECTED_DATA = BY_ALL;
+
+  course_data = "";
+  SELECTED_DATA.forEach(function(d) {
+    if(d.course == COURSE_NAME) {
+      course_data = d;
+    }
+  });
+
+  max_size = 0;
+  course_data.reviews.forEach(function(d) {
+    if(d.size > max_size) {
+      max_size = d.size + .01
+    }
+  });
+
+  wordScale = d3.scale.linear().domain([0,max_size]).range([10,160]);
+
+  layout_cloud(course_data.reviews);
+}
+
+var layout_cloud = function(words) {
+  d3.layout.cloud()
+     .size(SVG_SIZE)
+     .words(words)
+     .fontSize(function(d) { return wordScale(d.size); })
+     .on("end", draw)
+     .start();
+
+  function draw(words) {
+    d3.select("#cloud").append("svg")
+       .attr("width", SVG_SIZE[0])
+       .attr("height", SVG_SIZE[1])
+     .append("g")
+       .attr("transform", "translate(" + SVG_SIZE[0] / 2 + "," + SVG_SIZE[1] / 2 + ")")
+     .selectAll("text")
+       .data(words)
+     .enter().append("text")
+       .style("font-size", function(d)  { return d.size + "px"; })
+       .style("font-family", "Impact")
+       .style("fill", function(d, i) { return fill(i); })
+       .attr("text-anchor", "middle")
+       .attr("transform", function(d) {
+         return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+       })
+       .text(function(d) { return d.text; });
+  }
+}
+
+
 var startHere = function() {
   queue()
     .defer(d3.json, "data/all_courses_all.json")
@@ -24,64 +108,14 @@ var startHere = function() {
     .await(dataLoaded);
 
   function dataLoaded(error, all, dept, fam) {
-    console.log(error, all, dept, fam)
+    console.log(error, all, dept, fam);
 
     if (!error) {
-
-      var BY_ALL = all;
-      var BY_DEPT = dept;
-      var BY_FAM = fam;
-      var SVG_SIZE = [500, 500];
-      var selected_course = "";
-      var fill = d3.scale.category20();
-      var COURSE_NAME = "EXPOS 20.241: Paradox in Public Health";
-
-      var selected_course;
-      all.forEach(function(d) {
-        if(d.course == COURSE_NAME) {
-          selected_course = d;
-        }
-      });
-
-      var max_size = 0;
-      selected_course.reviews.forEach(function(d) {
-        if(d.size > max_size) {
-          max_size = d.size + .01
-        }
-      });
-
-      wordScale=d3.scale.linear().domain([0,max_size]).range([10,160]);
-
-      var layout_cloud = function(words) {
-        d3.layout.cloud()
-           .size(SVG_SIZE)
-           .words(words)
-           .fontSize(function(d) { return wordScale(d.size); })
-           .on("end", draw)
-           .start();
-
-        function draw(words) {
-          d3.select("#cloud").append("svg")
-             .attr("width", SVG_SIZE[0])
-             .attr("height", SVG_SIZE[1])
-           .append("g")
-             .attr("transform", "translate(" + SVG_SIZE[0] / 2 + "," + SVG_SIZE[1] / 2 + ")")
-           .selectAll("text")
-             .data(words)
-           .enter().append("text")
-             .style("font-size", function(d)  { return d.size + "px"; })
-             .style("font-family", "Impact")
-             .style("fill", function(d, i) { return fill(i); })
-             .attr("text-anchor", "middle")
-             .attr("transform", function(d) {
-               return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
-             })
-             .text(function(d) { return d.text; });
-        }
-      }
-
-      layout_cloud(selected_course.reviews);
-
+      BY_ALL = all;
+      BY_DEPT = dept;
+      BY_FAM = fam;
+      classList(BY_ALL);
+      updateData();
     } else {
       console.log("error loading data");
     }
@@ -90,6 +124,8 @@ var startHere = function() {
 
 startHere();
 
+// listener for select item change
+$(".drop-down").change(updateData());
 
 
 
