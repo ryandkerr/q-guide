@@ -192,5 +192,5 @@ def make_json(file_name, diction):
 # make_json("data/test_adjusted.json", test_final)
 # export_by_all("data/all_courses_all.json")
 # export_by_dept("data/all_courses_dept.json")
-export_by_fam("data/all_courses_fam.jsom")
+export_by_fam("data/all_courses_fam.json")
 
