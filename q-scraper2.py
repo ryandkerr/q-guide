@@ -15,7 +15,7 @@ LOGIN_URL = "https://www.pin1.harvard.edu/cas/login?service=https%3A%2F%2Fwww.pi
 # This session ID can be obtained by signing into the Q from your
 # browser and inspecting the value of the JSESSIONID cookie. It expires
 # frequently!
-SESSION_ID = 'D70A3E1C2ABF6A9163AE21C9F992FAC4'
+SESSION_ID = '906CBCB4B770915414368B2F4082FFFB'
  
 # Q URLs
 Q_BASE = "https://webapps.fas.harvard.edu/course_evaluation_reports/fas/"
